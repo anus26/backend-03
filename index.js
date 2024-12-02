@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 console.log("Mongo URI:", process.env.MONGO_URI);
 
 const encryptpassword="$2b$10$gqZs1GSEe9XHl64sYPOiwOvIO7YDimLPtwSf6lkDx1M4PTCoE..CK"
+const token= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFudXNyYXphMjY4QGdtYWlsLmNvbSIsImlhdCI6MTczMzEwNDk4OH0.Se5MvcN1qAVnmXMHruTBjGbhNkdvsSBZ9jvqcKCDVDI"
 
 app.post("/encryptpassword",(req,res)=>{
     const {password}=req.body
@@ -43,6 +44,20 @@ app.post("/checkpassword",(req,res)=>{
     })
     res.status(404).json({message:"incorrect password"})
     });
+})
+
+app.post ("/generatetoken",(req,res)=>{
+  const {email}=req.body
+  const  token = jwt.sign({ email }, JWT_TOkEN_SECRET, );
+  res.json({token})
+})
+
+app.post("/checktoken",(req,res)=>{
+  jwt.verify(token, process.env.JWT_TOKEN_SECRET, function(err, decoded) {
+    if(err) return res.json({message:"error occured"})
+    console.log(decoded) // bar
+  res.json(decoded)
+  });
 })
 
 
