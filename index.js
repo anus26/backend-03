@@ -6,7 +6,7 @@ import cors  from "cors"
 import cookieParser  from 'cookie-parser'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import userModels from "./src/models/user.models.js"; // Import user model
+import UserRoutes from "./src/routes/user.routes.js";
 
 
 
@@ -61,7 +61,7 @@ app.post("/checktoken",(req,res)=>{
 })
 
 
-
+app.use('/api/v1',UserRoutes);
 
 // Database Connection and Server Start
 connectDB()
