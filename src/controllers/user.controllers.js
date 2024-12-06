@@ -34,7 +34,7 @@ const longinUser=async(req,res)=>{
 
         const accessToken=generateAccessToken(user)
         const refreshToken = generateRefreshToken(user);
-        res.cookies("refreshToken",refreshToken,{http:true,secure:false})
+        res.cookie("refreshToken",refreshToken,{http:true,secure:false})
         res.json({
             message:"user login successfully",
             accessToken,
@@ -42,4 +42,24 @@ const longinUser=async(req,res)=>{
             data:user,
         })
 }
- export {registerUser,longinUser}
+
+// logout user
+
+const logoutUser=async(req,res)=>{
+    res.clearCookie("refreshToken")
+    res.json({message:"user logout successfully"})
+    
+}
+
+// refreshToken
+const refreshToken=async(req,res)=>{
+    const refreshToken=req.cookies.refreshToken||req.body.refreshToken
+    if(!refreshToken)return res.status(401).json({message:"Token not found"})
+        const decodedToken=jwt.verify(refreshToken,process.env.REFRESH_JWT_TOKEN_SECRET)
+    const user=await User.findOne({email:decodedToken.email})
+    if(!user)return res.stauts(404).json({message:"user not found"})
+        const generateToken=generateAccessToken(user)
+    res.json({message:"generated Token" ,accesstoken:generateToken})
+    res.json({decodedToken})
+}
+ export {registerUser,longinUser,logoutUser,refreshToken}
