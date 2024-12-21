@@ -51,8 +51,8 @@ app.post ("/generatetoken",(req,res)=>{
   const  token = jwt.sign({ email }, JWT_TOkEN_SECRET, );
   res.json({token})
 })
-
 app.post("/checktoken",(req,res)=>{
+  
   jwt.verify(token, process.env.JWT_TOKEN_SECRET, function(err, decoded) {
     if(err) return res.json({message:"error occured"})
     console.log(decoded) // bar
